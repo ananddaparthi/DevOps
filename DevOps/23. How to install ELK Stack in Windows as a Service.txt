@@ -1,0 +1,68 @@
+-------------------- HOW TO INSTALL ELK STACK IN WINDOWS-----------------------
+
+1. To install ELK, First you need to install ElasticSearch-Logstash-Kibana (ELK) and NSSM(Non-Sucking service manager)
+
+2. You can download them here. 
+   https://www.elastic.co/downloads
+   For NSSM, -> https://nssm.cc/download
+
+3. Extract all of them to a folder. To install them as a service in windows. First of all, You need JAVA8 in your
+   system. And You need to set path of JAVA_HOME in Environmental Variables.
+
+   ELASTIC SEARCH:
+
+4. Later, Open powershell in your windows and enter this command to install elasticsearch.
+   $ Invoke-Expression -command “c:\ELK-Stack\elasticsearch\bin\service install”
+                               ------YOUR PATH TO ELASTICSEARCH-------
+
+5. Next, Enter the following command $ Invoke-Expression -command “c:\ELK-Stack\elasticsearch\bin\service manager”
+
+6. Then a window will pop up. Select start service as AUTOMATIC and start the service.
+
+7. Verify the Elasticsearch is now running by opening a browser and going to
+   localhost:9200. You will see some code. ELasticSearch is Installed.
+
+   LOGSTASH:
+
+8. Now to install logstash, First you need to logstah.json configuration in logstash/bin directory. To do so open 
+   Windows powershell and enter the dfollowing command  
+   $ Start-BitsTransfer -Source http://robwillis.info/data/ELK-Stack/Config-Files/logstash.json -Destination c:\ELK-Stack\logstash\bin\
+
+9. Next enter the following command. $ Invoke-Expression –command “C:\ELK-Stack\nssm\win64\nssm install Logstash”
+
+10. Then NSSM service manager will pop up. There you need to give the path, startupdirectory,Arguments
+    PATH: c:\ELK-Stack\logstash\bin\logstash.bat (Path to logstash.bat)
+    STARTUP DIRECTORY: c:\ELK-Stack\logstash\bin
+    ARGUMENTS: -f c:\ELK-Stack\logstash\bin\logstash.json
+
+11. Next in details tab, Display name: Logstash
+                         Description: Logstash Service
+                         Startup type: Automatic
+
+12. On the dependency tab, In the box below enter -> elasticsearch-service-x64 and then Install Service and OK.
+
+13. Logstash is installed.
+
+   KIBANA:
+
+14. This is same as logstash, Open windows powershell and enter $ Invoke-Expression –command “C:\ELK-Stack\nssm\win64\nssm install Kibana”
+
+15. Then NSSM Service manager will pop up. Add the following 
+    Path: c:\ELK-Stack\kibana\bin\kibana.bat
+    Startup directory: c:\ELK-Stack\kibana\bin
+
+16. On the Details tab, set the following:
+    Display name: Kibana
+    Description: Kibana Service
+    Startup type: Automatic
+
+17. On the Dependencies tab, Enter the following in the box:
+    elasticsearch-service-x64
+    Logstash
+
+18. Click Install and the OK. Kibana is installed. To verify, Open browser and go to localhost:5601. It will take 
+    some time to load. 
+
+19. DOne!
+
+REF: http://robwillis.info/2016/05/installing-elasticsearch-logstash-and-kibana-elk-on-windows-server-2012-r2/

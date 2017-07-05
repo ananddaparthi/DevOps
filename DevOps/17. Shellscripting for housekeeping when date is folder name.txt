@@ -1,0 +1,42 @@
+---------THIS IS SHELL SCRIPTING FOR HOUSEKEEPING FILES WHICH NAMED WITH DATE---------------
+
+#!/bin/sh
+
+cd /home/ec2-user/shellscripting/
+for f in [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9].txt; do
+thirty_days=$(date -d "30 days ago" +%Y-%m-%d)
+date="${f%.txt}"
+[[ $date < $thirty_days ]] && gzip "$f"
+done
+
+cd /home/ec2-user/shellscripting/
+for f in [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9].txt.gz; do
+sixty_days=$(date -d "60 days ago" +%Y-%m-%d)
+date="${f%.txt.gz}"
+[[ $date < $sixty_days ]]  && aws s3 mv "$f" s3://rajrupeshbucket/
+done
+
+
+Here, Im zipping files(named with date) older than 30 days and sending files to s3 bucket older than 60 days.
+
+
+Ref:https://unix.stackexchange.com/questions/208683/removing-files-based-on-date-given-in-filename
+
+
+
+--------------ANOTHER SCRIPT----------------------------------------
+
+
+
+#!/bin/sh
+
+find /home/ec2-user/shellscripting/* -type f -name 'rupesh.[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9].txt' -exec sh -c 'fdate="${1%.txt}"; 
+fdate="${fdate##*.}"; [ "$fdate" "<" "$(date +%F -d "30 days ago")" ] && echo gzip "$1"' find-sh {} \;
+
+find /home/ec2-user/shellscripting/* -type f -name 'rupesh.[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9].txt.gz' -exec sh -c 'fdate="${1%.txt.gz}"; 
+fdate="${fdate##*.}"; [ "$fdate" "<" "$(date +%F -d "60 days ago")" ] && echo  rm "$1"' find-sh {} \;
+
+Here, Im zipping files older than 30 days and deleting files older than 60 days.
+
+
+Ref: https://unix.stackexchange.com/questions/288002/how-do-i-delete-file-by-filename-that-are-set-as-dates

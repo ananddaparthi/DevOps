@@ -1,0 +1,16 @@
+How to pull data from bitbucket to jenkins
+
+1. First you need to signup in bitbucket. And create a repository in it. 
+
+2. Create a repository of any name you wish and then create repository. 
+
+3. After creating repository then add a readme file to test. And copy the link in the bitbucket to get connected
+   with the jenkins.
+
+4. Then start a job in jenkins by clicking new item and select freestyle project and then ok.
+
+5. Now in paste the cloned address in github project and git.
+
+6. You will get a error. Then you must install bitbucket pulgin in jenikins.
+
+7. Now select apply changes and start bulid . Then jenkins will pull the requested file from bitbucket. 

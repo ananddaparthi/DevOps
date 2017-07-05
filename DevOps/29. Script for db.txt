@@ -1,0 +1,8 @@
+#!/bin/sh
+
+databases=`mysql -u root -pyourpassword -e "SHOW DATABASES;"| tr -d "| " | grep -v "\(Database\|information_schema\|performance_schema\|mysql\|sys\)"`
+now="$(date +'%m_%d_%Y')"
+
+for a in $databases;do
+mysqldump -u root -pyourpassword "$a" > /home/ec2-user/dummy/"$a"_"$now".sql && gzip "$a"_"$now".sql | aws s3 mv *.gz s3://dummybkt123/ --profile s3fullaccess;
+done

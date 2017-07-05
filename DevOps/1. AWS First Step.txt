@@ -1,0 +1,17 @@
+1. First you need to open an account in Amazon web service(AWS) and launch a EC2 instance.
+   (EC2 instance is nothing but a linux server) (EC2- Elastic compute cloud)
+
+2. Open AWS-> services-> compute-> EC2. Open EC2 server and Launch instance. Select free tier-> select Redhat 
+   and then it gives t2micro as free-> next. In the 5th step you will get add tag.
+   you can add any tag if you want-> next you can name a security group as you wish-> launch.
+
+3. Now you must create a new key pair and name it to get .pem file. Now lauch instance. 
+
+4. Now download puttygen and open keygen and load .pem file in it to generate .ppk file. 
+   Then save private key.
+
+5. Now open putty and under hostname write (ec2-user@IPV4 Public IP). You can get your ipv4 public ip in 
+   aws ec2 server.
+
+6. Now in putty under SSH goto Auth and open .ppk file from your system and then open. Now you can login to
+   redhat linux system.

@@ -1,0 +1,65 @@
+--------------------------- HOW TO PUSH .WAR TO TOMCAT USING DOCKER CONTAINER------------------------------
+
+1. First of all you need to know how to write a Dockerfile. Create a dummy directory using mkdir and add .war file
+   to it which you want to deploy. First of all you need to give sudo permissions to docker. So that you no need 
+   to type sudo for every docker commands. To do that 
+   $ sudo usermod -aG docker (ec2-user/jenkins/..)
+
+2. Now create a file named Dockerfile using touch and add docker instructions to it.
+
+  DOCKERFILE : 
+                  FROM tomcat:8.0
+                  MAINTAINER rupesh
+                  RUN apt-get update
+                  RUN apt-get -y  install vim
+                  ADD hello-world.war /usr/local/tomcat/webapps/
+
+3. This is my Dockerfile. In this i want to deploy a sample helloworld war file to tomcat. where 
+
+   FROM tomcat:8.0 -> This is a docker instruction to get tomcat version 8.0 
+
+   MAINTAINER rupesh -> Maintainer is just a name.
+
+  (RUN apt-get update      -> Here i want to run apt-get update command to install vi editor in docker. Because, 
+   RUN apt-get install vim)   there will be no vi editor in docker. So to install it we use these commands.
+
+   ADD hello-world.war  ->   This instruction is nothing but to add hello-world.war file to the webapps of tomcat.
+
+4. Now, you need to open putty and login to ec2-user and enter
+   $ docker build -t myapp:1.0 /home/ec2-user/tomcat/
+   
+   Here you are building you war file using docker instructions in Dockerfile. There -t is nothing but a tag.
+
+5. Now you need to run $ docker run -d -p 9999:8080 myapp1.0
+   With this command you going to run a tomcat image of your tag(myapp1.0) in port 9999.
+   Here, You must enable 9999 port in aws.
+
+6. Now you can access tomcat in 9999 port using  yourawspublicIP:9999 in your browser. 
+   Now you cant access to manager app in tomcat because you didnt set any username and pass to your manager app.
+ 
+7. This is why we wrote an docker instruction to download vim editor. Now enter command $ docker ps (which shows
+   the present running procceses) and copy container id from it.
+
+8. Now to open manager app in tomcat, you need to set username and pass in tomcat-users.xml in docker.
+   To enter into docker $ docker exec -it (container id) bash . This command helps to enter into docker.
+
+9. Now goto cd conf/ and vi tomcat-users.xml. Here we dont need to be sudo because root privileges were given to docker
+   Now add the roles below to tomcat users 
+   
+ <role rolename="admin"/>
+ <role rolename="admin-gui"/>
+ <role rolename="admin-script"/>
+ <role rolename="manager"/>
+ <role rolename="manager-gui"/>
+ <role rolename="manager-script"/>
+ <role rolename="manager-jmx"/>
+ <role rolename="manager-status"/>
+ <user username="admin" password="adminadmin" roles="admin,manager,admin-gui,admin-script,manager-gui,manager-script,manager-jmx,manager-status" />
+
+10. Now you need to get out of docker to run it. So just type exit to getout and restart container by typing
+    $ docker restart containerID
+
+11. Now you can access manager app in tomcat. And you can see your war file there. Done.
+   
+   
+  

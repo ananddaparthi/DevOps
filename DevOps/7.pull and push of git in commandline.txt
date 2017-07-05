@@ -1,0 +1,23 @@
+      HOW TO PULL AND PUSH REQ IN GIT USING COMMAND LINE
+
+1) First you need to initialize git by using ($ git init). This will create .git directory. 
+
+2) Now to add reference remote git url ($ git remote add origin your*git*repo*url)
+
+3) Now you need to pull code by using ($ git pull origin midd) midd = branch. Then after check whether files got 
+   pulled or not.
+
+4) Now use insert command ($ vi filename) to do any changes needed and save it ($ esc :wq!)
+
+5) Now after modification you need to do staging i.e need to add all files bye using ($ git add .)
+
+6) Now before pulling you musy commit first ($ git commit -m "message")
+
+7) Now try push command ($ git push origin midd) and authenticate. Then you will get some error. This is because
+   your branch  reference is in remote not in HEAD. 
+
+8) To check it you must use ref command ($ git show ref)
+
+9) So you need to push midd reference as head to push the modified file ($ git push origin HEAD:midd)
+
+10) It's done .. :) 

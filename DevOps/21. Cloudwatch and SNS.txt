@@ -1,0 +1,21 @@
+-----------------HOW TO GET A NOTIFICATION WHEN AN ALARM IS TRIGGERED USING CLOUDWATCH AND SNS----------------------
+
+1. First, you need to create a topic in SNS(Simple Notification Services). In that topic you can assign a role to 
+   which it should notify you. To do that SNS -> Create New Topic -> Enter Topicname and Displayname -> next -> 
+   Click on ARN -> Create Subscription -> Select email/SMS under protocol -> Create subscription.
+
+2. Now you are done with SNS. Open Cloudwatch, You need to create a alarm in it and attach that SNS topic to this
+   alarm. So that when ever the alarm is triggered, you will get a notification according to your subscription. 
+
+3. Open cloudwatch -> Create alarm -> Select metrics(For Ex: ECS) -> Select whatever metricsName you want and then 
+   Next -> Name and Description of alarm -> Select you requirement in metricsName(For ex: I selected CPUUTILIZATION,
+   So i set CPUUTILIZATION is>=1 and for 1 consecutive period to test the alarm) -> In Action field, in send notification
+   to -> Select enterlist and paste your SNS ARN there -> select your requirements in Alarm Preview -> Create alarm.
+
+4. When ever your requirement meets, the alarm gets triggered. And whenever the alarm gets triggered, You will get
+   a notification according to your SNS subrscription. Done!
+
+5. When the alarm state is ALARM : It reached the value we gave.
+                           INSUFFICIENT : It is checking for the value.
+                           OK : Not reached to the value. 
+   

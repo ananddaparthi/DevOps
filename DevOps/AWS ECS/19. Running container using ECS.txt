@@ -1,0 +1,61 @@
+------------------------------HOW TO USE EC2 CONTAINER SERVICE (ECS)--------------------------------
+
+ First You need to install Aws cli in you centOS. Later follow the steps below
+
+1. To launch a container using ECS, You must create a role in IAM. So goto IAM service and create a role.
+   OPEN AWS -> IAM -> ROLES -> CREATE NEW ROLE -> UNDER AWS SERVICEROLE -> SELECT AMAZON EC2 CONTAINER SERVICEROLE -> 
+   ATTACH AMAZONEC2CONTAINERSERVICEROLE POLICY -> CREATE.
+
+2. After creating role, Now you can create cluster in ECS. Goto ECS service -> Create cluster -> Name your cluster
+   (ECS) -> Ec2 instance type:t2.micro (because it is free) -> Number of instances:2 (Because it is cluster we need
+   At least 2) -> After that select a keypair of your own (To login into server) -> Select default VPC -> Select 
+   your subnets(2a,2b) -> Select you security group -> In container instance IAM role: ecsServiceRole -> create.
+
+3. Now click on View Cluster, it will show the empty cluster with the status: ACTIVE. Now login to putty using your regular instance (Not with the instance just created when you created a cluster). Im running this as a job in jenkins, So you need to go to the jenkins folder and create a file with shell extension(ex:- ecs.sh). 
+
+4. After creating a file, Check whether the file created is with jenkins ownership or not. If it is not, Change Ownership to jenkins. And also check permissions, it should be with executable permissions. If it not, change it.
+
+5. Now open file (i.e ecs.sh) and copy the following content:
+    for param in "$@"
+    do
+    echo "exporting $param"
+    eval "export $param"
+    done
+
+    workdir=/home/ec2-user/tmp
+    CLUSTERNAME=$docker_env
+    FAMILYNAME=Test_$docker_container-$docker_env
+    LBNAME=test-$docker_env-$docker_container
+    #SUBSTRING LBNAME to 32 Chars
+    LBNAME=${LBNAME:0:32}
+    SERVICENAME=$docker_container-$docker_env-svc
+
+    aws ecs register-task-definition --family $FAMILYNAME --container-definitions "[{\"name\":\"$docker_container-$docker_env\",\"image\":\"$docker_container:$docker_image_version\",\"cpu\":512,\"memory\":512,\"essential\":true,\"portMappings\":[{\"containerPort\":$docker_port_app,\"hostPort\":$docker_port_host,\"protocol\":\"tcp\"}]}]"
+
+    aws elb create-load-balancer --load-balancer-name $LBNAME --listeners "Protocol=TCP,LoadBalancerPort=$docker_port_host,InstanceProtocol=TCP,InstancePort=$docker_port_host"  --subnets "subnet-6d49e124" "subnet-f879ef9f"  --security-groups "sg-5002e52b" --scheme "internet-facing"
+
+    aws elb create-load-balancer-listeners --load-balancer-name $LBNAME --listeners "Protocol=TCP,LoadBalancerPort=80,InstanceProtocol=TCP,InstancePort=$docker_port_host"
+
+    aws ecs create-service --cluster $CLUSTERNAME --service-name $SERVICENAME --task-definition $FAMILYNAME --load-balancers "[{\"loadBalancerName\":\"$LBNAME\",\"containerName\":\"$docker_container-$docker_env\",\"containerPort\":$docker_port_app}]" --role ecsServiceRole --desired-count 1
+  
+    aws ecs update-service --cluster $CLUSTERNAME --service $SERVICENAME --task-definition $FAMILYNAME --desired-count 1
+
+    aws elb configure-health-check --load-balancer-name $LBNAME --health-check Target=TCP:$docker_port_host,Interval=30,UnhealthyThreshold=3,HealthyThreshold=2,Timeout=10  )
+
+6. Here in it you must edit your security group and subnet ids and set scheme to --internet-facing and role to ecsServiceRole.
+
+7. After that, Create a job in Jenkins and select none in Source Code Management. now select Add BuildStep and select Execute shell. In that add the following
+   (export AWS_ACCESS_KEY_ID= “******”
+    export AWS_SECRET_ACCESS_KEY= “****”
+    export AWS_DEFAULT_REGION=us-west-2
+
+    cd /var/lib/jenkins/
+    ./ecs.sh docker_env="Give-name-of-the-cluster-created" docker_container="tomcat" docker_image_version=8.0 docker_port_app=8080 docker_port_host=9999)  (Here, I wish to run Tomcat in my cluster)
+
+8. docker_env is your cluster name, docker_container is what you want to run in container, docker_image_version is the version of your image, docker_port_app is default we set it as 8080, and docker_port_host is port you wish to run the container.
+
+9. Now build the job in jenkins. You will see a container running in your ECS. To see the docker container you can login to putty with the ip of the instance in which the container is running. $docker ps for the running process.
+
+10. To access it, You need to get load balancer DNS and then :9999(your port no). 
+
+

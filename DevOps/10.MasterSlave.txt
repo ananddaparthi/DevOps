@@ -1,0 +1,40 @@
+--------------------------MASTER/SLAVE-------------------------
+
+SLAVE TASK: 
+
+1. Here slave need to set a unique password to get connected with master. To set password, Open putty and login
+   to your linux server and give the following command.
+   ($ sudo vi /etc/ssh/sshd_config)
+
+2. Now goto insert mode and change password settings by removing # in password authentication.
+   It will be like (#PasswordAuthentication yes)
+   Change it to (PasswordAuthentication yes) 
+
+3. Now save the changes by clicking <esc> :wq!
+
+4. Now type command ($ sudo service sshd restart). Now to set password  enter ($ sudo passwd ec2-user) and create
+   a unique password. 
+
+5. Now close putty and login again without giving .ppk (private key). Then it will ask password to launch your server.
+
+6. Now create a empty folder in your server. Just open putty and mkdir X . To create a directory. This is to save all
+   the artifacts that build in the slave. Nothing but a workspace.
+
+MASTER TASK:
+
+1. Now open Jenkins-> Manage Jenkins-> Manage Node-> New node-> Give node name->Check Permanent Agent->Ok.
+
+2. Now if you want more than 1 executor you can edit. And now add the slave's folder path in remote root directory.
+
+3. In labels, Give any label name to it. and then in launch method, select Launch slave agents via SSH (Coz LINUX SYSTEM).
+   and in HOST give slave's ip address and then add credentials-> Jenkins-> and in username-> ec2-user password-> passwd that slave creates.
+ 
+4. Now click on HOST KEY VERIFICATION STRATEGY and change to NON VERIFYING VERIFICATION STARTEGY. 
+
+5. Now click tool locations and give git path of the slave (i.e. path of git in server) and then save.
+
+6. Now create a project and in configure you must select RESTRICT WHERE THIS PROJECT CAN BE RUN and give label 
+   that you gave when creating node. Clone git url and paste in github project and then save.
+
+7. Now BUILD. Then it will run in slave's server. After building, to see the artifact generated open the folder 
+   that created by the slave in his server. You can see the artifact and workspace over there. DONE!

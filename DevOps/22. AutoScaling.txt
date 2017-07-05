@@ -1,0 +1,16 @@
+----------------- AUTOSCALING---------------------------------
+
+1. It is mainly used to scalein or scaleout the instances automatically based on the policies we add.
+
+2. Open EC2, First you need to create Launch configuration. To do so Open EC2 -> Create launch configuration -> 
+   Select free tier only -> select Redhat -> It will suggest t2.micro as free tier -> click next -> Name the launch 
+   configuration -> give IAM role -> next:add storage -> select storage -> next:configure sg -> select existing sg -> 
+   select your sg -> Review -> create launch configuration -> Select your keypair -> create launch configuration.
+
+3. Launch configuration is created and now create an auto scaling group with the launch configuration -> name ->
+   select how many instances needed -> Select VPC -> Select Subnets -> In advanced, you can set health check for 
+   load balancer and then next -> select use scaling policies and give the minimum and maximum requirement to start
+   new instance -> Select alarm required -> In take the action select how many instances needed to launch when alarm
+   is triggered -> Same process in the decrease group -> Next -> Configure notification -> Configure tags
+
+4. Done. Whenever the alarm is triggered, the required action will takes place.

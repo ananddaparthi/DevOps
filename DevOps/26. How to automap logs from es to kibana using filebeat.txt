@@ -1,0 +1,71 @@
+------------------- HOW TO AUTOMAP THE LOGS FROM ES TO KIBANA USING "FILEBEAT"--------------------------------
+
+
+----------- FILE BEAT INSTALLATION IN WINDOWS AS A SERVICE-------------------
+
+
+1. To automate the the logs mapping from elastic search to kibana, You need to download filebeat. 
+   (https://www.elastic.co/downloads/beats)
+
+2. Download filebeat from the link above and extract it to your desired directory. Now open windows powershell and
+   tyoes the command below. 
+
+   PS > (cd "C:\Program Files\Filebeat") -> your desired path where you extracted the file
+   PS C:\Program Files\Filebeat> (powershell.exe -ExecutionPolicy UnRestricted -File .\install-service-filebeat.ps1)
+
+3. Now Edit the filebeat.yml config file and test your config. To do so run the following command in PS
+   
+   PS C:\Program Files\Filebeat> (.\filebeat.exe -e -configtest)
+
+4. Now installation and configuration process is done. You need to start the service. Type the following command
+   (Start-Service filebeat)
+
+5. File beat Installation is done. 
+
+
+-------------- AUTOMAPPING LOGS FROM ES TO KIBANA USING FILEBEAT-------------------------
+
+
+
+1. Here i tried to send tomcat's catalina logs to elastic search and then access those logs through kibana. 
+   To do so i need to send catalina logs from filebeat to elastic search first. 
+
+2. To do so, Open filebeat.yml file located in your filebeat directory. Open it with notepadd++  and edit the path
+   column. 
+ 
+3. Edit its path as (C:\Program Files\Apache Software Foundation\Tomcat 9.0\logs\catalina.*). This is because im 
+   sending tomcat's catalina logs to elastic search.
+
+4. Now set its output column as follows 
+   
+   output.elasticsearch:
+  # Array of hosts to connect to.
+  hosts: ["localhost:9200"]
+  index: "devtomcat-%{+yyyy.MM.dd}"
+
+  # Optional protocol and basic auth credentials.
+  protocol: "http"
+  username: "elastic"
+  password: "changeme"
+
+5. It will create an index in elastic search as devtomcat- "date". You can check elastic search indices in browser 
+   by opening elastic search (http://localhost:9200). Now a pop up will ask you user name and password which you 
+   mentioned in filebeat.yml 
+
+   USERNAME: elastic
+   PASSWORD: changeme
+
+6. Now to see the indices in elastic search type (http://localhost:9200/_cat/indices?v) in the browser. There you can
+   see the index which we created using filebeat. If you dont see open run and type services.msc and restart both 
+   tomcat and filebeat. 
+
+7. Here when we restart tomcat, it will create a new catalina logs to generate. 
+
+8. Now open kibana in browser (http://localhost:5601). It will ask you the same username and password. Enter them and 
+   go to management -> Index pattern -> + -> In index name type devtomcat-* to locate the indeices that generate 
+   with the name devtomcat-* . Here * is all that starts with devtomcat-
+
+9. click index contain time based event and create index name pattern. Then an index pattern is created in the name 
+   of devtomcat-* and you can see the catalina logs there. 
+
+10. Done!  

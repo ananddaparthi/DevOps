@@ -1,0 +1,18 @@
+With no date in filename(based on file modified or created date):
+
+#!/bin/sh
+
+find /YOUR/DIR/PATH/*.png -mtime +15 -exec gzip {} \;
+aws s3 mv /YOUR/DIR/PATH/ s3://YOURBUCKETNAME/ --recursive --exclude '*'  --include '*.gz'
+
+with date as filename :
+
+#!/bin/sh
+
+cd /YOUR/DIR/PATH/
+for f in image-[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9].png; do
+fifteen_days=$(date -d "15 days ago" +%Y-%m-%d)
+date="${f%.JPG}"
+date="${date#*-}"
+[[ $date < $fifteen_days ]] && gzip "$f"|aws s3 mv "$f.gz" s3://YOURBUCKETNAME/
+done

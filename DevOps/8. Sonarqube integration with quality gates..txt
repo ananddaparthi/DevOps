@@ -1,0 +1,59 @@
+-------------- HOW TO GET SONARQUBE ANALYSIS AFTER A BUILD IN JENKINS------------------------
+
+1. First you need to install sonarqube and sonar runner in the local host.
+
+2. Go to sonarqube site and download sonarqube and sonar runner. Create a folder in localdisk:C named sonarqube
+   and extract both sonarqube and runner to that folder. Now open Systemprop-> Advanced->Environment variables-> and set JAVA_HOME and JRE_HOME. 
+   You also need to give sonar runner path in PATH of environmental variables.
+
+3. Now go to sonarqube folder->bin->windows-x86 64bit-> click start sonar.bat . Then it will be done. 
+
+4. To access sonarqube, open browser and type localhost:9000. 9000 port is prefixed for sonarqube.
+
+5. Now open sonar runner->bin->sonar-runner. Then it will be installed.
+
+6. Now open jenkins-> manage jenkins-> manage plugins-> available and search for sonar plugin and install it.
+
+7. You need to configure sonar with jenkins. To do so you need to go to jenkins-> configure system-> there give
+   any name -> enter sonar url i.e http://localhost:9000/ -> select server version as u wish. If you select 5.2
+   then you need to give your credentials (or) if you select 5.3 you need to give server authentication token to it . 
+   To get that token go to sonarqube->my account-> security-> generate a token u wish to.
+
+8. Now open jenkins->global tool configuration-> and then configure JDK,GIT,MAVEN,SONARRUNNER. Configuring is 
+   but giving their directory links. Here I configured MAVEN because my project is in MAVEN.
+   (http://localhost:8080/configureTools/)
+
+9. Now create a new job in jenkins and select the project type you want and then click ok. And give your git repo
+   url in github and git column. 
+
+10. Now under build trigger, Tick build whenever a snapshot dependency is build. Now go to prebuild and select 
+    execute sonar scanner and in analysis property you need to give the following 
+    (sonar.projectKey=AWS_SM_JavaRepo  
+     sonar.projectName=${JOB_NAME}
+     sonar.projectVersion=1.${BUILD_NUMBER}
+     sonar.sources=src)
+    There project key is anything you wish. But it should be unique.
+          sonar sources is a folder where you code is in.
+
+11. In the latest versions of sonarqube you need not to give any properties like above. Just you can tick PREPARE
+    SONAR SCANNER ENVIRONMENT in the build environment step. So that jenkins will get all need to run sonar scanner.
+
+12. Build. :) 
+
+
+------------------------- QUALITY GATES TO SONARQUBE-------------------------------------
+
+13. Now using quality gates to the above build.
+
+14. You need to install qualitygates plugin in jenkins. Jenkins-> Manage jenkins-> Manage plugins
+
+15. After installing plugins you need to go to the config in project and add quality gates to postbuild actions.
+
+16. In sonarqube, qualitygate requirement will be given default. You can make changes to that default settings as u wish.
+
+17. Build again. :D
+
+
+REF: https://www.youtube.com/watch?v=Ihh3K00hV_k
+     https://www.youtube.com/watch?v=Gu9skLzRSao
+     https://www.youtube.com/watch?v=jh7utASgKj4

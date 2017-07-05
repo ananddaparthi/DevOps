@@ -1,0 +1,31 @@
+------------------------ HOW TO INSTALL AWS-CLI IN CENTOS------------------------------
+
+1. First we need python for it.
+   $ sudo yum install python-pip
+
+2. Next we need pip. Pip is a package management system used to install and manage software packages written in
+   python.
+   $ curl -O https://bootstrap.pypa.io/get-pip.py
+
+3. After downloading the pip package 
+   $ sudo python get-pip.py
+
+4. Now install aws cli using pip.
+   $ sudo pip install awscli
+
+5. Now we need to configure aws 
+   $ aws configure 
+
+6. It will ask for AWS ACCESS ID and AWS SECRET KEY. To get those keys click on your username on top right of ec2
+   and select My Security credentials -> Continue to security credentials -> AccessID and secretKeys -> Create new 
+   ACCESS KEY. Here for the first time we will not have any keys. So create a new one.
+
+7. After creating, download the keys. We cant see them once we closed.
+
+8. Now copy those keys in linux server
+   Accesskey ID:
+   SecretKey ID:
+   Default region name: us-west-2
+   O/P forum: json
+
+9.  Done.

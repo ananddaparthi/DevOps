@@ -1,0 +1,20 @@
+How to pull data from git hub to jenkins
+
+1. First you need to signup in github. And start a project in it. 
+
+2. Create a repository of any name you wish and then create repository. 
+
+3. Now go to github and upload a file you wish to pull and clone the address of your repository.
+
+4. Then start a job in jenkins by clicking new item and select freestyle project and then ok.
+
+5. Now in paste the cloned address in github project and git.
+
+6. You will get a error says no git in your server.
+
+7. Then open putty and login to your redhatsystem and then use the following command to download git in your server.
+   (sudo yum install git)
+
+8. After installing you will get your error rectified in jenkins . Now select apply changes.
+
+9. Now start bulid . Then jenkins will pull the requested file from github. 

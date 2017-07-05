@@ -1,0 +1,28 @@
+----------------------INTEGRATING ANT WITH JENKINS-------------------------
+
+1. To integrate Ant with jenkins, You need to install java and git.
+
+2. You need to install ant in cent os as well. To install it. Open putty and login to your server.
+
+3. Change directory to opt ($ cd /opt)
+   download Ant ($ sudo wget http://www.us.apache.org/dist/ant/binaries/apache-ant-1.9.9-bin.tar.gz)
+   Unzipping .tar ($ sudo tar zxvf apache-ant-1.9.9-bin.tar.gz)
+   renaming file ($ mv /opt/apache-ant-1.9.9 /opt/ant) 
+   
+4. Now you need to setup ANT_HOME environment variables
+   ($ sudo sh -c 'echo ANT_HOME=/opt/ant >> /etc/environment')
+   ($ sudo ln -s /opt/ant/bin/ant /usr/bin/ant)
+
+5. Ant is installed in your server. To check ($ ant -version)
+   Reference: http://www.techoism.com/how-to-install-apache-ant-on-centos/
+
+6. Now you need to install Ant plugin in jenkins. Jenkins-> Manage jenkins-> Manage plugins
+
+7. Now go to global tool configuration and add path to ant.
+
+8. Now upload a ant project in github and clone that url. Create a new job in jenkins as a free style and add repo
+   url to github and git. 
+
+9. In build select INVOKE ANT. And give target needed. 
+
+10. BUILD :) 

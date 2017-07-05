@@ -1,0 +1,31 @@
+----------------------DEPLOYING WAR TO TOMCAT USING JENKINS VIA DOCKER --------------------------------
+
+1. To deploy a war file to tomcat using jenkins via docker, you need to create a new repository in github and upload a project containing .war or .jar artifact in it. create a new job in jenkins.
+
+2. Now you need to dummy folder in main folder (src->main) in your project in github and create a Dockerfile in it. 
+   DOCKER FILE: FROM tomcat
+                MAINTAINER anand
+             ADD gs-maven-0.1.0-SNAPSHOT.war  /usr/local/tomcat/webapps/
+
+4. Now configure your job in jenkins by setting clone url of github and if it is maven project you give "clean package" in goals and options.
+
+5. Now in post step select execute shell and write the commands below 
+
+   cd /var/lib/jenkins/workspace/your-jenkins-project-where .war file       will-build/target/
+   cp gs-maven-0.1.0-SNAPSHOT.war                                    /var/lib/jenkins/workspace/Mergeauto/src/main/Docker/
+
+   docker build -t myapp:1.0 /var/lib/jenkins/workspace/Mergeauto/src/main/Docker/
+   docker run -d -p 9998:8080 myapp:1.0
+
+6. Here you are sending .war to the dummy folder you create in github project. And building image with a tag myapp:1.0
+   and running it in 9999 port. 
+
+7. Now you can access tomcat using port 9999. With url: yourawspublicIp:9999
+
+8. If you cant access manager app. Then you must add tomcat-user.xml to the dummy folder in github and must add 
+   that tomcat-user.xml to the tomcat-user.xml path in docker. 
+
+9. DONE. 
+
+
+REF: http://stackoverflow.com/questions/27818856/docker-add-warfile-to-official-tomcat-image

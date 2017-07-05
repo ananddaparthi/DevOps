@@ -1,0 +1,71 @@
+--------------------------HOW TO CREATE YOUR OWN CERT USING SSL------------------------
+
+1. Inorder to create a cert using open ssl. First, you need to install OPENSSL.
+   http://gnuwin32.sourceforge.net/packages/openssl.htm
+
+2. After downloading, you need to install it and set some environmental variables. For that 
+   open cmd prompt and enter 
+   $ set OPENSSL_CONF=YOURPATH\OFOpenSSL-Win32\bin\openssl.cfg
+
+3. Now you need to set path for the RAND file to a folder where you want your certificate to be
+   created. To set that, open cmd prompt and enter 
+   $ set RANDFILE=c:\demo\.rnd     Here Demo is a folder which i created to put my certificate in 
+   that folder.
+
+4. Now to open OPENSSL you need to enter the following command 
+   $ c:\OpenSSL-Win32\bin\openssl.exe
+
+5. Then you need to generate a 4096-bit long RSA key for our root CA and store it in a file 
+   named ca.key. To do that we need to enter: 
+   $ genrsa -out ca.key 4096
+
+6. Then it will generate a private key. You can also password-protect the key by adding -des3 
+   to the command above. 
+
+7. After that we need to create a self signed root CA certificate. By entering the command: 
+   $ req -new -x509 -days 1826 -key ca.key -out ca.crt
+   Here -x509 -> Option used for self-signed certificate.
+        1826 -> cert valid for 5 yrs 
+
+8. Here after, you  need to enter some details like 
+   COUNTRY NAME: US
+   STATE OR PROVINCE NAME: MO 
+   LOCALITY NAME: LS
+   ORGANIZATION NAME: Some X
+   ORGANISATION UNIT NAME: Some X
+   COMMON NAME: X
+   EMAIL: x@gmail.com
+
+9. Next step is to create another certificate which is used as public certificate. So you need
+   to generate another key for that.
+   $ genrsa -out ia.key 4096
+
+10. Key is generated. Now you need to req a new certificate for that key. 
+   $ req -new -key ia.key -out ia.csr 
+
+11. Here again you need to fill some details like above. But one thing to remember is that you
+    shouldn't give same common name. 
+    COUNTRY NAME: US
+    STATE OR PROVINCE NAME: MO 
+    LOCALITY NAME: LS
+    ORGANIZATION NAME: Some X
+    ORGANISATION UNIT NAME: Some X
+    COMMON NAME: Y (Coz, Shouldn't give same common name) 
+    EMAIL: x@gmail.com
+
+12. Now you need to process the request for the subordinate CA certificate and get signed it 
+    by the root CA. i.e. Just to link this pubilc cert to private cert. To do so :
+    $ x509 -req -days 730 -in ia.csr -CA ca.crt -CAkey ca.key -set_serial 01 -out ia.crt
+
+13. Now to use this keys for digital signatures with microsoft's signtool, You need to package
+    the keys and cert. 
+    $ pkcs12 -export -out ia.p12 -inkey ia.key -in ia.crt -chain -CAfile ca.crt
+
+14. If you used the same common names above. You'll get error here saying 
+    Error self signed certificate getting chain.
+    error in pkcs12
+
+15. Done!
+
+REF: https://blog.didierstevens.com/2015/03/30/howto-make-your-own-cert-with-openssl-on-windows/
+ 

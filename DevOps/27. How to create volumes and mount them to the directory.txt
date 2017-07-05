@@ -1,0 +1,19 @@
+------------------------------HOW TO ATTACH VOLUMES TO THE INSTANCE---------------------------
+
+1. First, you need to create a volume in EC2 instance. To do so, open volumes -> create volume -> select volume
+   type (SSD) -> Size -> Select Available zones -> Create.
+
+2. Now rightclick on the created volume and attach volume to the instance you want. rightclick -> attach volume ->
+   select your instance -> attach.
+
+3. Now you need to assign the created volume to the instance. To do so, open putty and login to your server. To check
+   your created volume type $(lsblk). It will show your volumes of the instance. 
+
+4. Now to mount the newly attached volume to any directory, first you need file system. So create a filesystem 
+   $ (sudo mkfs -t ext4 /path) ex: mypath is /dev/xvdf
+
+5. Now you need to mount to the created file system. To do so $(sudo mount xvdf /dev/apps)
+
+6. It will get mounted to the created volume. To check the mounted volumes $(df -h)
+
+7. Done.

@@ -1,0 +1,64 @@
+                          HOW TO DOWNLOAD JENKINS IN CENTOS
+
+1.Now Open putty and login to redhat linux system and give follwing commands to install jenkins.
+
+2.First you need to check update of the centos by typing (Sudo yum update)
+  Sudo- Super user do. To install anything in linux system the user must me superuser. So we need to set user to sudo
+  yum- Yum is a repository nothing but a database
+
+3. Now we need to setup java virtual machine before installing jenkins because jenkins works on java.
+   To install java first we need to install wget.
+   ($ sudo yum install wget)
+
+4. After that now change directory where you need your java to be installed and download linux by using these commands.
+   ($ cd /opt/)
+   ($ sudo wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u121-b13/e9e7ea248e2c4826b92b3f075a80e441/jdk-8u121-linux-x64.tar.gz")
+   ($ sudo tar -xvzf jdk-8u121-linux-x64.tar.gz)
+
+5. After unzipping archive file you must give the following command to install java
+   ($ cd /opt/jdk1.8.0_121/)
+   ($ sudo alternatives --install /usr/bin/java java /opt/jdk1.8.0_121/bin/java 2)
+   ($ sudo alternatives --config java)
+
+6. After this select a program that provides java.
+
+7. At this point java is installed. Now you need to setup javac and jar command path alternatives.
+   ($ sudo alternatives --install /usr/bin/jar jar /opt/jdk1.8.0_121/bin/jar 2)
+   ($ sudo alternatives --install /usr/bin/javac javac /opt/jdk1.8.0_121/bin/javac 2)
+   ($ sudo alternatives --set jar /opt/jdk1.8.0_121/bin/jar)
+   ($ sudo alternatives --set javac /opt/jdk1.8.0_121/bin/javac)
+
+8. Now configuring environment variables.
+   ($ export JAVA_HOME=/opt/jdk1.8.0_121)
+   ($ export JRE_HOME=/opt/jdk1.8.0_121/jre)
+   ($ export PATH=$PATH:/opt/jdk1.8.0_121/bin:/opt/jdk1.8.0_121/jre/bin)
+
+9. Now installing Jenkins
+   (sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo)
+   (sudo rpm --import http://pkg.jenkins-ci.org/redhat-stable/jenkins-ci.org.key)
+   (sudo yum install jenkins)
+
+10. To start jenkins and allow it to run use the following commands
+   (sudo systemctl start jenkins.service)
+   (sudo systemctl enable jenkins.service)
+
+11. After that we need to allow the inbound traffic. As follows
+   
+   -> Open ec2 instance 
+   -> On dashboard, select N/w security
+   -> Under N/w security, select security group and then go to sg you created.
+   -> And then click inbound and then edit
+   -> Add rule Type: Custom TCP rule, Port range: 8080 and then save.
+
+12. Now copy Ipv4public ip and then give :8080 (public ip:8080) in the url coloumn of the web browser.
+
+13. It will ask for the password. Copy the link given and open putty and type
+    ( sudo cat copiedlink)
+    You will get password. 
+
+14. Install plugins needed and its done.
+
+
+Refference: https://www.vultr.com/docs/how-to-install-jenkins-on-centos-7
+            https://tecadmin.net/install-java-8-on-centos-rhel-and-fedora/
+

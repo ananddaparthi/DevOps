@@ -1,0 +1,104 @@
+-----------------------------HOW TO PUSH MAVEN BUILD TO APACHE TOMCAT----------------------------
+
+1. To push a build to apache tomcat, first you need to install apache tomcat. As i installed nexusOSS in local host
+   Im installing apache tomcat in centOs.
+
+2. To install apache tomcat on centos. Open putty 
+   ($ sudo yum install tomcat)
+
+3. We need to install admin packages ($ sudo yum install tomcat-webapps tomcat-admin-webapps)
+
+4. Now you need to configure tomcat web management interface. For that you need to create a user credentials.
+   ($ sudo vi/usr/share/tomcat/conf/tomcat-users.xml)
+     In that add user credentials in between tomcat users
+     <tomcat-users>
+     <user username="yourusername" password="yourpassword" roles="manager-gui,admin-gui"/>
+     </tomcat-users>
+
+5. The default port no of tomcat is 8080. Im running jenkins in the same port. So i need to change port of tomcat.
+   Now open putty ($ cd /usr/share/tomcat/conf)
+   ( $ sudo vi server.xml)
+   now locate the connector port and change port no using install command.  and then save using <esc> :wq!
+
+6. Now you must open 8082 port in aws portal. To do that open aws-> security groups-> inbound rule-> add new rule.
+
+7. Now open tomcat using your changed port and then give credentials by clicking manager app. You are done. 
+
+-------------------PUSHING BUILD TO TOMCAT-----------------------
+
+8. Pushing a build to tomcat is of two types 
+   i) Using POM.XML
+  ii) Using container deployement plugin in jenkins.
+
+   i) USING POM.XML:
+     
+    -> If you want to deploy a maven build to tomcat, first of all you need to create users in tomcat-user.xml
+       To create users, open putty and login to your server 
+       ($ cd /usr/share/tomcat/conf)
+       (sudo vi tomcat-users.xml)
+       
+       Now add the follwing in <tomcat-users> ... </tomcat-users>
+       <role rolename="admin"/>
+       <role rolename="admin-gui"/>
+       <role rolename="admin-script"/>
+       <role rolename="manager"/>
+       <role rolename="manager-gui"/>
+       <role rolename="manager-script"/>
+       <role rolename="manager-jmx"/>
+       <role rolename="manager-status"/>
+       <user username="admin" password="password" roles="admin,manager,admin-gui,admin-script,manager-gui,manager-script,manager-jmx,manager-status" />
+
+       Add these in between tomcat users and then save. 
+
+    -> Now add the following deployement plugin in pom.xml 
+       
+        <plugin>
+   <artifactId>maven-deploy-plugin</artifactId>
+   <version>2.8.1</version>
+   <executions>
+      <execution>
+         <id>default-deploy</id>
+         <phase>deploy</phase>
+         <goals>
+            <goal>deploy</goal>
+         </goals>
+      </execution>
+   </executions>
+</plugin> 
+
+     -> Now add tomcat configuration plugin
+
+        <plugin>
+	<groupId>org.codehaus.mojo</groupId>
+	<artifactId>tomcat-maven-plugin</artifactId>
+	<configuration>
+		<url>http://54.69.72.209:9080/manager/text</url>
+		<server>MyServer</server>
+		<path>/rajrupesh</path>
+	</configuration>
+</plugin>
+
+      -> Now on jenkins->goals-> clean tomcat:deploy
+ 
+      -> Done! 
+
+ii) USING CONTAINER PLUGIN IN JENKINS:
+
+    -> For this first  you need to install delpoy to container plugin in jenkins adn then add tomcatusers in 
+       ($ cd /usr/share/tomcat/conf) ($ sudo vi tomcat-user.xml). As shown above.
+     
+    -> Now add servers in server.xml of maven. As shown above.
+
+    -> For this in pom.xml you dont need to put <distribution management>... </distribution management> and deploy 
+       plugin. You will configure them in jenkins job configure.
+    
+    -> Now in jenkins job configure-> postbuild actions-> Deploy war/ear to container
+       WAR/EAR FILE: **/*.war -> This is they way to say choose war file.
+       CONTEXT PATH: /RAJ -> This is just a pathh name 
+       CONTAINER: Add container-> tomcat 7.x
+                  Manager credentials : Cred of tomcat manager app
+                  Tomcat url: http://54.69.72.209:9080  -> url upto port number
+ 
+    -> In goals and options: clean package. DONE!
+
+REFF: https://www.digitalocean.com/community/tutorials/how-to-install-apache-tomcat-7-on-centos-7-via-yum

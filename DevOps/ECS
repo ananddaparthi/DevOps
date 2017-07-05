@@ -1,0 +1,25 @@
+for param in "$@"
+do
+  echo "exporting $param"
+  eval "export $param"
+done
+
+workdir=/home/ec2-user/tmp
+CLUSTERNAME=tt-web-$docker_env
+FAMILYNAME=TT_WEB_$docker_container-$docker_env
+LBNAME=tt-web-$docker_env-$docker_container$docker_port_host
+#SUBSTRING LBNAME to 32 Chars
+LBNAME=${LBNAME:0:32}
+SERVICENAME=$docker_container-$docker_env-service
+
+aws ecs register-task-definition --family $FAMILYNAME --container-definitions "[{\"name\":\"$docker_container-$docker_env\",\"image\":\"$docker_container:$docker_image_version\",\"cpu\":512,\"memory\":2048,\"essential\":true,\"portMappings\":[{\"containerPort\":$docker_port_app,\"hostPort\":$docker_port_host,\"protocol\":\"tcp\"}],{\"name\":\"applicationid\",\"value\":\"$docker_container\"}]}]"
+
+aws elb create-load-balancer --load-balancer-name $LBNAME --listeners "Protocol=TCP,LoadBalancerPort=$docker_port_host,InstanceProtocol=TCP,InstancePort=$docker_port_host"  --subnets "subnet-3288727b" "subnet-f6bca392" --security-groups "sg-401b6239" --scheme "internal"
+
+aws elb create-load-balancer-listeners --load-balancer-name $LBNAME --listeners "Protocol=TCP,LoadBalancerPort=80,InstanceProtocol=TCP,InstancePort=$docker_port_host"
+
+aws ecs create-service --cluster $CLUSTERNAME --service-name $SERVICENAME  --task-definition $FAMILYNAME --load-balancers "[{\"loadBalancerName\":\"$LBNAME\",\"containerName\":\"$docker_container-$docker_env\",\"containerPort\":$docker_port_app}]" --role ecsServiceRole --desired-count 1
+
+aws ecs update-service --cluster $CLUSTERNAME --service $SERVICENAME --task-definition $FAMILYNAME --desired-count 1
+
+aws elb configure-health-check --load-balancer-name $LBNAME --health-check Target=TCP:$docker_port_host,Interval=30,UnhealthyThreshold=3,HealthyThreshold=2,Timeout=10

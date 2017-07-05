@@ -1,0 +1,88 @@
+----------------- HOW TO INSTALL MYSQLDB IN CENTOS AND CHANGE THE ROOT DIRECTORY OF MYSQLDB----------------
+
+
+1. To install mysqldb in your centos, First you need to install mysql in your yum  repository. To do so, visit
+   (https://dev.mysql.com/downloads/repo/yum/)  and search for the desired file named (Red Hat Enterprise Linux 7 /
+    Oracle Linux 7 (Architecture Independent), RPM Package) in that site. 
+
+2. Copy the code below that link. It will be like this (mysql57-community-release-el7-11.noarch.rpm) and type the 
+   following command in your centos 
+   $ sudo wget https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm
+
+3. Once the rpm file is saved, we will verify the integrity of the download by running md5sum and comparing it with
+   the corresponding MD5 value listed on the site. MD5:c070b754ce2de9f714ab4db4736c7e05
+
+4. To check it type the following command $ (md5sum mysql57-community-release-el7-11.noarch.rpm). Then it will show
+   you the MD5 number as the output. Verify it. 
+
+5. Now you added mysql in your yum repository. So to install mysqldb in your centos 
+   $ (sudo yum install mysql-server)
+   Press y to confirm that you want to proceed. Since we've just added the package, we'll also be prompted to accept
+   its GPG key. Press y to download it and complete the install.
+
+6. Next $ (sudo systemctl start mysqld) 
+        $ (sudo systemctl status mysqld)
+
+7. During the installation process, a temporary password is generated for the MySQL root user. Locate it in the 
+   mysqld.log with this command:
+
+   $ (sudo grep 'temporary password' /var/log/mysqld.log)
+
+8. Make note of the password, which you will need in the next step. 
+
+9. Enter $(sudo mysql_secure_installation) . This will prompt you for the default root password. As soon as you 
+   enter it, you will be required to change it.
+
+10. Enter the generated password and then set the new password and then hit y. we'll press Y and then ENTER to all
+    the subsequent questions in order to remove anonymous users, disallow remote root login, remove the test 
+    database and access to it, and reload the privilege tables.
+
+11. Now that we've secured the installation. You can test by login to it 
+    $(mysqladmin -u root -p)
+    Enter the command above and then enter your password this will take you to mysql server. 
+
+12. DONE!
+
+REF: https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-centos-7#prerequisites
+
+
+
+
+------------------HOW TO CHANGE THE ROOT DIRECTORY OF MYSQL DB -----------------------------
+
+1. Before making any changes, first make sure to stop mysql service by enter the command 
+   $(sudo service mysqld stop)
+
+2. The root directory of the mysqldb is (/var/lib/mysql). If you want to change that root directory to (/data). 
+   Copy the files from /var/lib/mysql to /data by entering the following command: 
+   $(sudo cp -rap /var/lib/mysql /data)
+
+3. Now edit MySQL default configuration file /etc/my.cnf and update values of datadir and socket variable.
+
+  Change From:
+  datadir=/var/lib/mysql
+  socket=/var/lib/mysql/mysql.sock
+
+  Change To: 
+  datadir=/data
+  socket=/data/mysql/mysql.sock
+
+4. Add the SELinux security context to /data before restarting. To do so 
+   $(sudo semanage fcontext -a -t mysqld_db_t "/data(/.*)?")
+   $(sudo restorecon -R /data)
+
+5. Now go to /data. You will find a directory mysql in it and Simply delete ib_logfile0, ib_logfile1, ibdata1, 
+   *.err, *.pid files from your new data directory. This is because the db will automatically generate those files
+   on the startup. So MAKE SURE TO ERASE THEM.
+
+6. Now start you db $(sudo service mysqld start). It will start without any problem. To check whether the data dir
+   is changed or not. Enter the following command
+   $ (mysql -u root -p -e "SELECT @@datadir;")  you will see your new root dir there. 
+
+7. Done!
+
+REF: https://www.tecmint.com/change-default-mysql-mariadb-data-directory-in-linux/
+
+     https://tecadmin.net/change-default-mysql-data-directory-in-linux/
+
+     https://dba.stackexchange.com/questions/13098/how-to-change-data-location-on-ubuntu

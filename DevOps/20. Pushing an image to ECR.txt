@@ -1,0 +1,43 @@
+--------------------------HOW TO PUSH AN IMAGE TO ECR ---------------------------------
+
+1. To push an image to ECR, Initially we need to create a repository in ECR. To do that
+   Open ECS -> Repositories -> Create Repository -> Repository name -> Next-> Repo created.
+
+2. Now  Retrieve the docker login command that you can use to authenticate your Docker client to your registry.
+   Open your server in putty and enter the below command.
+   $ aws ecr get-login --region us-west-2
+
+3. Now you will get big data as authentication. Copy that and paste it as a command. Then you will see "Login Succeeded".
+
+4. Now in order to push an image to your repository. Initially you need to build it. Before building you need to put
+   a Dockerfile in an directory, So that we can give the path of that directory.
+
+5. Now enter build command in the putty as follows:
+   $ docker build -t 886431691000.dkr.ecr.us-west-2.amazonaws.com/ecr:1.0  /home/ec2-user/tomcat/
+
+886431691000.dkr.ecr.us-west-2.amazonaws.com/ecr -> This is the path of your ecr repo. Says where it should get pushed.
+/home/ec2-user/tomcat/ -> This is the path of your Dockerfile
+1.0 -> This is just a tag.
+
+6. After entering that command it says build successfull. Build will be done according to your Dockerfile.
+
+7. Now you need to push it to your repo. To do that enter :
+   $ docker push 886431691000.dkr.ecr.us-west-2.amazonaws.com/ecr:1.0
+
+8. It shows the layers of the images get pushing. And thats it you will get the image build to your repository. 
+
+9. After this, If you want to get the same image pulled. You dont need to get this from dockerhub repo. You can pull
+   the image from your repository. To do so 
+   $ docker pull 886431691000.dkr.ecr.us-west-2.amazonaws.com/ecr:1.0
+                         (or)
+   $ docker pull 886431691000.dkr.ecr.us-west-2.amazonaws.com/ecr@digest
+
+   digest: This you can find in your ECR repo
+
+
+----------------------------SOME MORE COMMAND ON CLI-----------------------------------------
+
+1. To list your repos in ECR -> $ aws ecr describe-repositories
+   This shows the entire list of your repos with their name, ARN, ID, URI etc. 
+
+2. 
