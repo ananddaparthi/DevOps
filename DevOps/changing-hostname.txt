@@ -1,0 +1,6 @@
+changing hostname of server:
+
+$ hostname
+# hostnamectl set-hostname "Your-Hostname"
+# hostnamectl status
+# vi /etc/hosts ( add your hostname at last of 127.0.0.1....localdomain4)
