@@ -59,6 +59,8 @@
 14. Install plugins needed and its done.
 
 
+==> check this for building jenkins from cli https://stackoverflow.com/questions/36548690/start-jenkins-build-using-batch-script
+
 Refference: https://www.vultr.com/docs/how-to-install-jenkins-on-centos-7
             https://tecadmin.net/install-java-8-on-centos-rhel-and-fedora/
 
