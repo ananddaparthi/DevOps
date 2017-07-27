@@ -1,0 +1,18 @@
+#!/bin/sh
+`sudo mkdir /apps/app-backup/apps-backup_"$(date +'%m_%d_%Y')"`
+now="$(date +'%m_%d_%Y')"
+cd /var/www/html/
+
+
+sudo tar -czvf /apps/app-backup/apps-backup_"$now"/itconnectus-"$now".tar.gz itconnectus ;
+sudo tar -czvf /apps/app-backup/apps-backup_"$now"/klab-"$now".tar.gz klab ;
+sudo tar -czvf /apps/app-backup/apps-backup_"$now"/psl-"$now".tar.gz psl ;
+sudo tar -czvf /apps/app-backup/apps-backup_"$now"/jobportal-"$now".tar.gz jobportal ;
+sudo tar -czvf /apps/app-backup/apps-backup_"$now"/connectvms-"$now".tar.gz connectvms ;
+
+cd /apps/app-backup/
+for f in apps-backup_[0-9][0-9]_[0-9][0-9]_[0-9][0-9][0-9][0-9]; do
+fifteen_days=$(date -d "15 days ago" +%m_%d_%Y)
+date="${f#*_}"
+[[ $date < $fifteen_days ]] && sudo rm -r "$f";
+done
