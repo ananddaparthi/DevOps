@@ -14,7 +14,7 @@
 
 4. To check it type the following command $ (md5sum mysql57-community-release-el7-11.noarch.rpm). Then it will show
    you the MD5 number as the output. Verify it. 
-
+   $ sudo rpm -ivh mysql57-community-release-el7-9.noarch.rpm
 5. Now you added mysql in your yum repository. So to install mysqldb in your centos 
    $ (sudo yum install mysql-server)
    Press y to confirm that you want to proceed. Since we've just added the package, we'll also be prompted to accept
@@ -38,7 +38,7 @@
     database and access to it, and reload the privilege tables.
 
 11. Now that we've secured the installation. You can test by login to it 
-    $(mysqladmin -u root -p)
+    $(mysql -u root -p)
     Enter the command above and then enter your password this will take you to mysql server. 
 
 12. DONE!
