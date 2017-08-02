@@ -74,7 +74,7 @@
 	<configuration>
 		<url>http://54.69.72.209:9080/manager/text</url>
 		<server>MyServer</server>
-		<path>/rajrupesh</path>
+		<path>/anand</path>
 	</configuration>
 </plugin>
 
