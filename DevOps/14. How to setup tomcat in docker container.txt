@@ -2,6 +2,14 @@
 
 1. First you need to open putty and login.
 
+## the below process is depricated in docker-cs so follow :
+           A) Download the rpm from https://download.docker.com/linux/centos/7/x86_64/stable/Packages/
+	   B) run $ sudo yum install -y --setopt=obsoletes=0 \
+                          docker-ce-17.03.1.ce-1.el7.centos \
+                           docker-ce-selinux-17.03.1.ce-1.el7.centos
+		C) sudo service docker start
+		   Done
+
 2. Then to install docker if you try ($ sudo yum install -y docker) then it will say NO DOCKER PACKAGES. This means you didnt store any docker.repo in yum repos. To check repositories in yum ($ cd /etc/yum.repos.d). You dont find any Docker.repo in it.
  
 https://docs.docker.com/engine/admin/systemd/  --> HTTP/HTTPS Proxy (Corporate settings)
