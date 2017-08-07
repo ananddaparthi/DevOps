@@ -123,5 +123,8 @@ Docker Events:
 these are used to check the events.
 # docker events
 Tar a docker image:
-# docker save --output imageName.tar imageName
+# docker save --output imageName.tar imageName (or)
 # docker save imageNamen > imageName.tar
+loading from a saved image:
+# docker load --input imageName.tar (or)
+# docker load < imagename.tar
