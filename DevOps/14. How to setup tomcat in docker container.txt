@@ -122,3 +122,6 @@ To assign a particular ip addres to our container
 Docker Events:
 these are used to check the events.
 # docker events
+Tar a docker image:
+# docker save --output imageName.tar imageName
+# docker save imageNamen > imageName.tar
