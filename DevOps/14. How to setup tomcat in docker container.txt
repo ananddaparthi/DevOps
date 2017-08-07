@@ -105,5 +105,6 @@ $ (docker rmi -f imageid) To force remove the selected image.
 			<REPO_NAME:TAG><DOCKER_FILE_PATH> up to before docker file
 24)docker ps -a | grep Exit | cut -d ' ' -f 1 | xargs sudo docker rm  --> remove all exited containers
 25) docker inspect docker-id  
-26) docker commit -m "any msg" -a any-author-name conrainer-id new-image-name ==> this is used to create a new image from the existing container.just like creating image of an ec2
+26) docker commit -m "any msg" -a any-author-name conrainer-id new-image-name ==> this is used to create a new image from the existing container.just like creating image of an ec2.
+27) docker exeec -u 0 -it container-id bash ==> this is used to coonect to a cintainer as root user if the image is built with non root user.here 0 is for root user.
    
