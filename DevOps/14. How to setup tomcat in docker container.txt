@@ -107,4 +107,4 @@ $ (docker rmi -f imageid) To force remove the selected image.
 25) docker inspect docker-id  
 26) docker commit -m "any msg" -a any-author-name conrainer-id new-image-name ==> this is used to create a new image from the existing container.just like creating image of an ec2.
 27) docker exeec -u 0 -it container-id bash ==> this is used to coonect to a cintainer as root user if the image is built with non root user.here 0 is for root user.
-   
+28) entrypoint ==> we will use this in docker file to run the same exact command evry time
