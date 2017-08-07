@@ -108,3 +108,14 @@ $ (docker rmi -f imageid) To force remove the selected image.
 26) docker commit -m "any msg" -a any-author-name conrainer-id new-image-name ==> this is used to create a new image from the existing container.just like creating image of an ec2.
 27) docker exeec -u 0 -it container-id bash ==> this is used to coonect to a cintainer as root user if the image is built with non root user.here 0 is for root user.
 28) entrypoint ==> we will use this in docker file to run the same exact command evry time
+29) creating own networks ==> these networks are used to assign our own ip address and subnet range to our container.
+creating networks:
+# docker network ls ==> to list all the available networks.there will be some default netwroks.dont touch them.
+# docker network create --subnet 10.1.1/10(req subnet range) --gateway 10.1.0.1  myfstnetwork(this is n/w name)
+# docker network rm myfstnetwork(this is n/w name) ==> to rm a n/w
+creating a network with ip range label etc.
+# docker network create --subnet 10.1.1/10(req subnet range) --gateway 10.1.0.1 --ip-range=10.1.4.0/25 --driver=bridge --label=anylabel AnyNameForN/M
+To assign our own n/w to a container.
+# docker run -it --name AnyNameForOurContainer --net OurN/WName centos:latest /bin/bash
+To assign a particular ip addres to our container
+# docker run -it --name AnyNameForOurContainer --net OurN/WName --ip 10.4.1.100 centos:latest /bin/bash 
