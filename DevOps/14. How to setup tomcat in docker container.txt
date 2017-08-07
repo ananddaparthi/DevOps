@@ -128,3 +128,6 @@ Tar a docker image:
 loading from a saved image:
 # docker load --input imageName.tar (or)
 # docker load < imagename.tar
+Maintaiing a private repository on docker hub:
+create an account on docker hub
+# docker push --username=ourHubUsername (it asks for password)
