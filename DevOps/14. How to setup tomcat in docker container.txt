@@ -104,5 +104,6 @@ $ (docker rmi -f imageid) To force remove the selected image.
 23)docker build --rm=true -t <HELLOAPP:1.0> <home/ec2-user/docker/> -->Builds Docker
 			<REPO_NAME:TAG><DOCKER_FILE_PATH> up to before docker file
 24)docker ps -a | grep Exit | cut -d ' ' -f 1 | xargs sudo docker rm  --> remove all exited containers
-25) docker inspect docker-id    
+25) docker inspect docker-id  
+26) docker commit -m "any msg" -a any-author-name conrainer-id new-image-name ==> this is used to create a new image from the existing container.just like creating image of an ec2
    
