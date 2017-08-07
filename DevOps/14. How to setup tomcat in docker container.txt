@@ -119,3 +119,6 @@ To assign our own n/w to a container.
 # docker run -it --name AnyNameForOurContainer --net OurN/WName centos:latest /bin/bash
 To assign a particular ip addres to our container
 # docker run -it --name AnyNameForOurContainer --net OurN/WName --ip 10.4.1.100 centos:latest /bin/bash 
+Docker Events:
+these are used to check the events.
+# docker events
