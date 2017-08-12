@@ -33,7 +33,8 @@
    ($ export JRE_HOME=/opt/jdk1.8.0_121/jre)
    ($ export PATH=$PATH:/opt/jdk1.8.0_121/bin:/opt/jdk1.8.0_121/jre/bin)
 
-9. Now installing Jenkins
+9. Now installing Jenkins  (
+#to check jenkins port: /etc/sysconfig/jenkins
    (sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo)
    (sudo rpm --import http://pkg.jenkins-ci.org/redhat-stable/jenkins-ci.org.key)
    (sudo yum install jenkins)
