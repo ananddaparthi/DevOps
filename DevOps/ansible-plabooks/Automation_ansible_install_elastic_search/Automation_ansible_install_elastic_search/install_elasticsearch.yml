@@ -1,0 +1,35 @@
+- name: Elasticsearch with custom configuration
+  hosts: run-server
+  #tasks:
+  #- name: Display all variables/facts known for a host
+  #  debug:
+  #    msg: "*** {{ elasticsearch_cluster_name }} *** {{ elasticsearch_node_name }} *** {{ elasticsearch_node_data }} *** {{ elasticsearch_node_master }} *** {{ elasticsearch_bootstrap_memory_lock }} *** {{ elasticsearch_bootstrap_memory_lock }} *** {{ elasticsearch_network_host }} *** {{ elasticsearch_http_port }} *** {{ elasticsearch_discovery_zen_minimum_master_nodes }} *** {{ elasticsearch_discovery_zen_ping_unicast_hosts }} ***{{ elasticsearch_transport_tcp_port }} *** {{ elasticsearch_http_cors_enabled }} *** {{ elasticsearch_http_cors_allow_origin }} *** {{ elasticsearch_path_data }} *** {{ elasticsearch_http_cors_allow_headers }} ***"
+  #strategy: debug
+  #remote_user: ec2-user
+  roles:
+    #expand to all available parameters
+    - {role: oracle-java, oracle_java_set_as_default: no}
+    #- role: ansible-role-java
+      #when: "ansible_os_family == 'RedHat'"
+      #java_packages:
+      #  - java-1.8.0-openjdk
+    - { role: ansible-role-elasticsearch,  
+              #elasticsearch_cluster_name: esawsmdl,
+              #elasticsearch_node_name: es-mdl-client-02,
+              #elasticsearch_node_data: "true",
+              #elasticsearch_node_master: "true",
+              #elasticsearch_bootstrap_memory_lock: "true",
+              #elasticsearch_network_host: "[\"10.0.1.2\",_local_]",
+              #elasticsearch_http_port: 9200,
+              #elasticsearch_discovery_zen_minimum_master_nodes: 2,
+              #elasticsearch_discovery_zen_ping_unicast_hosts: "[\"10.0.1.2\", \"10.0.1.3\", \"10.0.1.4\", \"10.0.1.5\", \"10.0.1.6\"]",
+              #elasticsearch_transport_tcp_port: 9300,
+              #elasticsearch_http_cors_enabled: "true",
+              #elasticsearch_http_cors_allow_origin: "\"*\"",
+              #elasticsearch_path_data: "/apps",    
+              #elasticsearch_http_cors_allow_headers: Authorization
+              }
+
+  become: true
+  become_method: sudo
+  become_user: root

@@ -1,0 +1,59 @@
+---
+- include: setup-RedHat.yml
+  when: ansible_os_family == 'RedHat'
+
+- include: setup-Debian.yml
+  when: ansible_os_family == 'Debian'
+
+- name: Configure Elasticsearch.
+  template:
+    src: elasticsearch.yml.j2
+    dest: /etc/elasticsearch/elasticsearch.yml
+    owner: root
+    group: elasticsearch
+    mode: 0750
+  notify: restart elasticsearch
+
+- name: Configure systemd-elasticsearch
+  lineinfile:
+    path: /usr/lib/systemd/system/elasticsearch.service
+    regexp: '^#LimitMEMLOCK='
+    line: 'LimitMEMLOCK=infinity'
+
+- name: Configure sysconfig-elasticsearch 
+  lineinfile:
+    path: /etc/sysconfig/elasticsearch
+    regexp: '^#MAX_LOCKED_MEMORY='
+    line: 'MAX_LOCKED_MEMORY=unlimited'
+    
+- name: Configure sysconfig-elasticsearch cont...
+  lineinfile:
+    path: /etc/sysconfig/elasticsearch
+    regexp: '^#ES_JAVA_OPTS='
+    line: 'ES_JAVA_OPTS="-Xms15g -Xmx15g"'
+    
+- name: Configure limits.conf
+  lineinfile:
+    path: /etc/security/limits.conf
+    insertbefore: '^#End of file'
+    line: 'elasticsearch  -  nofile  65536'
+
+- name: create app data folder
+  file:
+    path: "{{elasticsearch_path_data}}/elasticsearch"
+    owner: elasticsearch
+    group: elasticsearch
+    state: directory
+  when: elasticsearch_path_data|default("") != "" 
+
+- name: daemon reload
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: elasticsearch
+
+- name: Start Elasticsearch.
+  service: name=elasticsearch state=started enabled=yes
+
+- name: Make sure Elasticsearch is running before proceeding.
+  wait_for: host=localhost port={{ elasticsearch_http_port }} delay=3 timeout=300

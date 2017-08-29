@@ -1,0 +1,15 @@
+---
+- hosts: httpd-webserver
+  remote_user: root
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: Installs httpd web server
+      yum: name=httpd state=installed update_cache=true
+      notify:
+        - start httpd
+
+  handlers:
+    - name: start httpd
+      service: name=httpd state=started
+
