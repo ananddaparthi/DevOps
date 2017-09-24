@@ -1,0 +1,12 @@
+#!/bin/sh
+
+databases=`mysql -u root -pPassword -e "SHOW DATABASES;"| tr -d "| " | grep -v "\(Database\|information_schema\|performance_schema\|mysql\|sys\)"`
+now="$(date +'%m_%d_%Y')"
+
+for a in $databases;do
+mysqldump -u root -pPassword "$a" > /home/ec2-user/"$a"_"$now".sql ;
+ gzip /home/ec2-user/*.sql ;
+ aws s3 mv /home/ec2-user/itcu*.gz s3://db-backup/Non-Prod/MySQL/ITCU-LNX-WEB-02/itcu/ ;
+ aws s3 mv /home/ec2-user/psl12*.gz s3://db-backup/Non-Prod/MySQL/ITCU-LNX-WEB-02/ps123/ ;
+ aws s3 mv /home/ec2-user/kla*.gz s3://db-backup/Non-Prod/MySQL/ITCU-LNX-WEB-02/kla/ ;
+done
