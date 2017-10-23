@@ -7,8 +7,8 @@ provider "aws" {
     region     = "${var.aws_region}"
 }
 
-resource "aws_security_group" "projectsg1" {
-  name        = "projectSG"
+resource "aws_security_group" "projectsg" {
+  name        = "projectsg"
   description = "Security group for my project"
   
 	tags {
@@ -24,13 +24,13 @@ resource "aws_security_group" "projectsg1" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["172.31.0.0/16"]
+    cidr_blocks = ["172.30.0.0/16"]
   }
   ingress {
-    from_port   = 449
-    to_port     = 449
+    from_port   = 4493
+    to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = ["172.31.0.0/16"]
+    cidr_blocks = ["172.30.0.0/16"]
   }
 
   egress {
@@ -47,17 +47,17 @@ resource "aws_instance" "Projectinstance" {
         instance_type ="${var.instance_type}"
         key_name = "${var.key_name}"
         subnet_id = "subnet-296d6371"
-        vpc_security_group_ids = ["${aws_security_group.projectSG.id}"]
+        vpc_security_group_ids = ["${aws_security_group.projectsg.id}"]
         tags {
         Name = "ProjectInstance"
         }
 		
-	provisioner "file" {
+provisioner "file" {
     source = "/home/ec2-user/httpd.conf"
     destination = "/etc/httpd/conf/httpd.conf"
   }
 
-  connection {
+connection {
     user = "root"
     type = "ssh"
     private_key = "${file("~/.ssh/id_rsa")}"
