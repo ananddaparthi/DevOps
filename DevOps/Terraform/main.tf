@@ -27,7 +27,7 @@ resource "aws_security_group" "projectsg" {
     cidr_blocks = ["172.30.0.0/16"]
   }
   ingress {
-    from_port   = 4493
+    from_port   = 443
     to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["172.30.0.0/16"]
