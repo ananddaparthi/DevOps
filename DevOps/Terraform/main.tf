@@ -52,16 +52,7 @@ resource "aws_instance" "Projectinstance" {
         Name = "ProjectInstance"
         }
 		
-provisioner "file" {
-    source = "/home/ec2-user/httpd.conf"
-    destination = "/etc/httpd/conf/httpd.conf"
-  }
 
-connection {
-    user = "root"
-    type = "ssh"
-    private_key = "${file("~/.ssh/id_rsa")}"
-  }
         
 user_data = "${file("apache.sh")}"
 user_data = "${file("ssl.sh")}"
