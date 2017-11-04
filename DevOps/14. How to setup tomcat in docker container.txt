@@ -2,7 +2,7 @@
 
 1. First you need to open putty and login.
 
-## the below process is depricated in docker-cs so follow :
+## the below process is depricated( step2&3) in docker-cs so follow :
            A) Download the rpm from https://download.docker.com/linux/centos/7/x86_64/stable/Packages/
 	   B) run $ sudo yum install -y --setopt=obsoletes=0 \
                           docker-ce-17.03.1.ce-1.el7.centos \
