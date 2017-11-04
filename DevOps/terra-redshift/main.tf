@@ -89,7 +89,7 @@ resource "aws_redshift_cluster" "mycluster" {
   vpc_security_group_ids = ["${aws_security_group.projectsg.id}"]
   skip_final_snapshot = "true"
   port              =  "4455"
-  iam_roles         = ["redshift-iam"]
+  #iam_roles         = ["redshift-iam"]
   enable_logging    =  "true"
   bucket_name       =  "my-sampleterraform-test-bucket"
   tags {
