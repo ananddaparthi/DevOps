@@ -21,7 +21,7 @@
    MAINTAINER anand -> Maintainer is just a name.
 
   (RUN apt-get update      -> Here i want to run apt-get update command to install vi editor in docker. Because, 
-   RUN apt-get install vim)   there will be no vi editor in docker. So to install it we use these commands.
+   RUN apt-get install vim)   there will be no vi editor in pre build tomcat docker image. So to install it we use these commands.
 
    ADD hello-world.war  ->   This instruction is nothing but to add hello-world.war file to the webapps of tomcat.
 
