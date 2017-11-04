@@ -9,7 +9,7 @@
 
   DOCKERFILE : 
                   FROM tomcat:8.0
-                  MAINTAINER rupesh
+                  MAINTAINER anand
                   RUN apt-get update
                   RUN apt-get -y  install vim
                   ADD hello-world.war /usr/local/tomcat/webapps/
@@ -18,7 +18,7 @@
 
    FROM tomcat:8.0 -> This is a docker instruction to get tomcat version 8.0 
 
-   MAINTAINER rupesh -> Maintainer is just a name.
+   MAINTAINER anand -> Maintainer is just a name.
 
   (RUN apt-get update      -> Here i want to run apt-get update command to install vi editor in docker. Because, 
    RUN apt-get install vim)   there will be no vi editor in docker. So to install it we use these commands.
