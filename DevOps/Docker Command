@@ -29,6 +29,7 @@ $ (docker rmi -f imageid) To force remove the selected image.
    docker rmi $(docker ps -a -q) -->
 14)docker kill <CONTAINER_ID> --> stop running container from host session
    docker run -it --rm tomcat:8.0 --> pulls & Run default TomCat server
+                   <-rm is to delete the container when exit> 
 16)docker run -p 8989:8080 tomcat:8.0 --> Run container Foreground
   <HOST PORT>:<SERVER PORT> <REPO >:<TAG>   <HOST PORT> should be unique
 17)docker run -d -p 8989:8080 <tomcat:8.0> --> Run container Background
