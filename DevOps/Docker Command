@@ -58,6 +58,8 @@ To assign our own n/w to a container.
 To assign a particular ip addres to our container
 # docker run -it --name AnyNameForOurContainer --net OurN/WName --ip 10.4.1.100 centos:latest /bin/bash 
 # dokcer run -d -p 9999:8080 -v /home/ec2-user/directry/:/usr/local/tomcat/conf tomcat:8.0
+#docker pause containerid  to pause a container
+	<unpause> to unpause
 Docker Events:
 these are used to check the events.
 # docker events
