@@ -65,4 +65,5 @@ Now go to settings.xml of maven ( If localhost Ex: C:\Program Files\apache-maven
 
 9. Now in jenkins build the project. The generated .jar or .war file will be in nexus repository you created.  
 
-REFF: http://www.baeldung.com/maven-deploy-nexus                                 
+REFF: http://www.baeldung.com/maven-deploy-nexus      
+http://www.sonatype.org/nexus/2017/02/08/using-nexus-3-as-your-repository-part-1-maven-artifacts/
