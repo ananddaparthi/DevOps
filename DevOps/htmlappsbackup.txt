@@ -4,11 +4,11 @@ now="$(date +'%m_%d_%Y')"
 cd /var/www/html/
 
 
-sudo tar -czvf /apps/app-backup/apps-backup_"$now"/itc-"$now".tar.gz itconnectus ;
-sudo tar -czvf /apps/app-backup/apps-backup_"$now"/kl-"$now".tar.gz klab ;
-sudo tar -czvf /apps/app-backup/apps-backup_"$now"/ps-"$now".tar.gz psl ;
-sudo tar -czvf /apps/app-backup/apps-backup_"$now"/job-"$now".tar.gz jobportal ;
-sudo tar -czvf /apps/app-backup/apps-backup_"$now"/conn-"$now".tar.gz connectvms ;
+sudo tar -czvf /apps/app-backup/apps-backup_"$now"/app1-"$now".tar.gz app1 ;
+sudo tar -czvf /apps/app-backup/apps-backup_"$now"/app2-"$now".tar.gz app2 ;
+sudo tar -czvf /apps/app-backup/apps-backup_"$now"/app3-"$now".tar.gz app3 ;
+sudo tar -czvf /apps/app-backup/apps-backup_"$now"/app4-"$now".tar.gz app4 ;
+sudo tar -czvf /apps/app-backup/apps-backup_"$now"/app5-"$now".tar.gz app5 ;
 
 cd /apps/app-backup/
 for f in apps-backup_[0-9][0-9]_[0-9][0-9]_[0-9][0-9][0-9][0-9]; do
